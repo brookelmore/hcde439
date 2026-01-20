@@ -9,10 +9,267 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Example Student's Assignment 1!</h1>
+    <h1>Brooke Elmore's Assignment 1!</h1>
     <div class="header">
-      <img src="red-panda.jpg" />
-      <p>Here is all the documentation for assignment 1!</p>
+      <img src="blink.jpeg" />
+      <p>For assignment 1, I decided to create a light show that blinks to the beat of "We Wish You A Merry Christmas".
+        Below, I have include my schematic, calculations, firmware, my circuits operations, and finally my answers to 
+        the additional questions.</p>
+
     </div>
+    <h2>Schematic</h2>
+    <img src="schematic.jpg" />
+    <h2>Calculations</h2>
+    <img src="resistance_calc.jpg" />
+    <h2>Firmware</h2>
+    <pre><code>// This program blinks four different LED lights (2 red 2 green) to the beat of "We Wish You A Merry Christmas."
+
+      // set pin 13 as int led1
+      int led1 = 13;
+      // set pin 12 as int led2
+      int led2 = 12;
+      // set pin 11 as int led3
+      int led3 = 11;
+      // set pin 10 as int led4
+      int led4 = 10;
+      
+      void setup() {
+        // setup led1
+        pinMode(led1, OUTPUT);
+        // setup led2
+        pinMode(led2, OUTPUT);
+        // setup led3
+        pinMode(led3, OUTPUT);
+        // setup led4
+        pinMode(led4, OUTPUT);
+      }
+      
+      // loop for the song to continue repeating until program is turned off
+      void loop() {
+        for (int i = 0; i <2; i++) {
+      
+          // WE
+          // turn the LED1 on 
+          digitalWrite(led1, HIGH);
+          // wait for a second 
+          delay(1000); 
+          // turn the LED1 off by making the voltage LOW              
+          digitalWrite(led1, LOW);
+      
+          // WISH
+          // turn the LED2 on 
+          digitalWrite(led2, HIGH);
+          // wait for a second  
+          delay(1000); 
+          // turn the LED2 off by making the voltage LOW              
+          digitalWrite(led2, LOW); 
+          // wait 0.05 sec  
+          delay(50);
+      
+          // YOU 
+          // turn the LED2 on 
+          digitalWrite(led2, HIGH);
+          // wait for 0.5 sec  
+          delay(500);    
+          // turn the LED2 off by making the voltage LOW            
+          digitalWrite(led2, LOW);   
+      
+          // A
+          // turn the LED3 on
+          digitalWrite(led3, HIGH); 
+          // wait for 0.5 sec 
+          delay(500);
+          // turn the LED3 off by making the voltage LOW                
+          digitalWrite(led3, LOW);
+          // wait for 0.05 sec
+          delay(50);    
+      
+          // MEH
+          // turn the 3LED on 
+          digitalWrite(led3, HIGH); 
+          // wait for 0.5 secs 
+          delay(500);
+          // turn the LED3 off by making the voltage LOW               
+          digitalWrite(led3, LOW); 
+          // wait for 0.05 sec  
+          delay(50); 
+      
+          // RRY
+          // turn the LED3 on 
+          digitalWrite(led3, HIGH); 
+          // wait for 0.5 sec 
+          delay(500);
+          // turn the LED3 off by making the voltage LOW               
+          digitalWrite(led3, LOW);
+          // wait for 0.05 sec   
+          delay(50); 
+      
+          // CHRIST
+          // turn the LED2 on (HIGH is the voltage level)
+          digitalWrite(led2, HIGH);
+          // wait for a second  
+          delay(1000);   
+          // turn the LED2 off by making the voltage LOW            
+          digitalWrite(led2, LOW); 
+          // wait for 0.05 sec  
+          delay(50);  
+      
+          // MAS
+          // turn the LED2 on 
+          digitalWrite(led2, HIGH); 
+          // wait for a second 
+          delay(1000);
+          // turn the LED2 off by making the voltage LOW               
+          digitalWrite(led2, LOW);
+          // wait for 0.05 sec   
+          delay(50);                
+          
+        }
+      
+        // WE
+        // turn the LED1 on 
+        digitalWrite(led1, HIGH);
+        // wait for a second  
+        delay(1000); 
+        // turn the LED1 off by making the voltage LOW                     
+        digitalWrite(led1, LOW);  
+      
+        // WISH
+        // turn the LED3 on
+        digitalWrite(led3, HIGH);  
+        // wait for a second
+        delay(1000);     
+        // turn the LED3 off by making the voltage LOW                 
+        digitalWrite(led3, LOW); 
+        // wait 0.05 sec 
+        delay(50);
+      
+        // YOU 
+        // turn the LED3 on 
+        digitalWrite(led3, HIGH); 
+        // wait for 0.5 sec 
+        delay(500);    
+        // turn the LED3 off by making the voltage LOW            
+        digitalWrite(led3, LOW);  
+      
+        // A
+        // turn the LED4 on 
+        digitalWrite(led4, HIGH); 
+        // wait for 0.5 secs 
+        delay(500);            
+        // turn the LED4 off by making the voltage LOW    
+        digitalWrite(led4, LOW); 
+        // wait for 0.05 sec  
+        delay(50);     
+      
+        // MEH
+        // turn the LED4 on
+        digitalWrite(led4, HIGH);  
+        // wait for 0.5 sec
+        delay(500);          
+        // turn the LED4 off by making the voltage LOW      
+        digitalWrite(led4, LOW);   
+        // wait for 0.05 sec
+        delay(50);  
+      
+        // RRY
+        // turn the LED4 on 
+        digitalWrite(led4, HIGH); 
+        // wait for 0.5 sec 
+        delay(500);      
+        // turn the LED4 off by making the voltage LOW
+        digitalWrite(led4, LOW); 
+        // wait for 0.05 sec  
+        delay(50);    
+      
+        // CHRIST
+        // turn the LED3 on 
+        digitalWrite(led3, HIGH); 
+        // wait for a second 
+        delay(1000);        
+        // turn the LED3 off by making the voltage LOW              
+        digitalWrite(led3, LOW); 
+        // wait for 0.05 sec  
+        delay(50);  
+      
+        // MAS
+        // turn the LED2 on 
+        digitalWrite(led2, HIGH); 
+        // wait for a second 
+        delay(1000);         
+        // turn the LED2 off by making the voltage LOW             
+        digitalWrite(led2, LOW); 
+        // wait for 0.05 sec  
+        delay(50); 
+      
+        // AND
+        // turn the LED2 on 
+        digitalWrite(led2, HIGH); 
+        // wait for 0.5 sec
+        delay(500);      
+        // turn the LED2 off by making the voltage LOW          
+        digitalWrite(led2, LOW); 
+        // wait for 0.05 sec  
+        delay(50);                      
+      
+        // A
+        // turn the LED2 on 
+        digitalWrite(led2, HIGH);
+        // wait for 0.5 sec  
+        delay(500);          
+        // turn the LED2 off by making the voltage LOW      
+        digitalWrite(led2, LOW);  
+        // wait for 0.05 sec 
+        delay(50);
+      
+        // HA
+        // turn the LED2 on 
+        digitalWrite(led2, HIGH);  
+        // wait for a second
+        delay(1000);         
+        // turn the LED2 off by making the voltage LOW             
+        digitalWrite(led2, LOW);  
+      
+        // PPY
+        // turn the LED4 on 
+        digitalWrite(led4, HIGH); 
+        // wait for a second 
+        delay(1000);    
+        // turn the LED4 off by making the voltage LOW                  
+        digitalWrite(led4, LOW);  
+      
+        // NEW
+        // turn the LED3 on 
+        digitalWrite(led3, HIGH);  
+        // wait for a second
+        delay(1000);       
+        // turn the LED3 off by making the voltage LOW               
+        digitalWrite(led3, LOW);
+      
+        // YEAR
+        // turn the LED4 on 
+        digitalWrite(led4, HIGH);  
+        // wait for 2 seconds
+        delay(2000);  
+        // turn the LED4 off by making the voltage LOW                    
+        digitalWrite(led4, LOW);   
+        // wait for 1 sec
+        delay(1000);               
+      
+      }</code></pre>
+
+      <h2>Circuit Operations</h2>
+      <img src="A1gif.gif" />
+      <h2>Additional Questions</h2>
+      <p>Question 1:</p>
+      <img src="graph.jpg" />
+      <p>Question 2:</p>
+      <p>You could blink a maximum of 7 leds at once on the arduino, and it would draw 140 mA.</p>
+      <p>Question 3:</p>
+      <p>The lightbulb has to blink 1 milisecond in order to blink fast enough to no longer tell it is blinking.</p>
+
+      
+
+
   </body>
 </html>
