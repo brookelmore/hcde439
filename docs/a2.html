@@ -9,10 +9,169 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Example Student's Assignment 2!</h1>
+    <h1>Brooke Elmore's Assignment 2!</h1>
     <div class="header">
-      <img src="red-panda.jpg" />
-      <p>Here is all the documentation for assignment 2!</p>
+      <img src="A2cover.jpg" />
+      <p>For assignment 2, I decided to create a reaction time game where the user must press the button when the 
+        blue button is lit up. Below, I have include my schematic, calculations, firmware, my circuits operations, 
+        and finally my answers to the additional questions.</p>
     </div>
+
+    <h2>Schematic</h2>
+    <img src="A2schem.jpeg" />
+    <h2>Calculations and other Questions</h2>
+    <img src="A2graph.jpg" />
+    <h2>Firmware</h2>
+    <pre><code>
+
+// LED connected to pin 6
+const int LED1 = 6;
+
+// LED connected to pin 9
+const int LED2 = 9;
+
+// LED connected to pin 10
+const int LED3 = 10;
+
+// LED connected to pin 11 (PWM for dimming)
+const int LED4 = 11;
+
+// Button connected to pin 2
+const int BUTTON = 2;
+
+
+
+// Runs once when the Arduino starts
+void setup() {
+
+  // Set LEDs 1 2 3 and 4 pins as outputs
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+  pinMode(LED3, OUTPUT);
+  pinMode(LED4, OUTPUT);
+
+  // Set button pin as input
+  pinMode(BUTTON, INPUT);
+}
+
+
+// Main loop
+
+// Runs repeatedly forever
+void loop() {
+
+  // Loop through each light from 1 to 4
+  for (int light = 1; light <= 4; light++) {
+
+    // Turn off all LEDs before turning on the next one
+    turnOffAll();
+
+    // If this is light 1, turn on LED1
+    if (light == 1) {
+      digitalWrite(LED1, HIGH);
+    }
+
+    // If this is light 2, turn on LED2
+    if (light == 2) {
+      digitalWrite(LED2, HIGH);
+    }
+
+    // If this is light 3, turn on LED3
+    if (light == 3) {
+      digitalWrite(LED3, HIGH);
+    }
+
+    // If this is light 4, turn on LED4 dimly using PWM
+    if (light == 4) {
+      analogWrite(LED4, 100);
+    }
+
+    // Wait so the player can see the LED
+    delay(300);
+
+    // Check if the button is pressed
+    if (digitalRead(BUTTON) == HIGH) {
+
+      // Check if the button was pressed at the correct time
+      checkResult(light);
+
+      // Wait one second before restarting the game
+      delay(1000);
+
+      // Restart the game loop
+      return;
+    }
+  }
+}
+
+
+// Determines if the player wins or loses
+void checkResult(int light) {
+
+  // Turn off all LEDs before showing result
+  turnOffAll();
+
+  // If the button was pressed when light 4 was on, the player wins
+  if (light == 4) {
+    win();
+  }
+
+  // Otherwise, the player loses
+  else {
+    lose();
+  }
+}
+
+
+// Runs when the player wins
+void win() {
+
+  // Flash all LEDs five times
+  for (int i = 0; i < 5; i++) {
+    // flash each led
+    digitalWrite(LED1, HIGH);
+    digitalWrite(LED2, HIGH);
+    digitalWrite(LED3, HIGH);
+    digitalWrite(LED4, HIGH);
+
+    //delay 150 milliseconds
+    delay(150);
+    //turn off all
+    turnOffAll();
+    //delay 150 milliseconds
+    delay(150);
+  }
+}
+
+
+// Runs when the player loses
+void lose() {
+  // loop through the light dimming to zero
+  for (int i = 200; i >= 0; i--) {
+    // Set brightness
+    analogWrite(LED1, i); 
+    // Wait for 10ms for smooth effect
+    delay(10);            
+  }
+  
+  // Optional: Add a delay here to keep it off for a moment
+  delay(1000); 
+
+} 
+
+
+// Turns off all LEDs
+void turnOffAll() {
+
+  digitalWrite(LED1, LOW);
+  digitalWrite(LED2, LOW);
+  digitalWrite(LED3, LOW);
+  digitalWrite(LED4, LOW);
+}</code></pre>
+
+<h2>Video</h2>
+<iframe src=https://youtube.com/shorts/Fcs8cFv2W4Y?feature=share></iframe>
+<p>https://youtube.com/shorts/Fcs8cFv2W4Y?feature=share</p>
+
   </body>
 </html>
