@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Brooke Elmore's Assignment 4!</h1>
+    <div class="header">
+      <img src="a4pic.jpg" />
+      <p>For assignment 4, I decided to make a remote turn the knob on my servo motor by pressing the arrows.
+        Below, I have include my schematic, calculations, firmware, my circuits operations, and finally my 
+        answers to the additional questions.</p>
+    </div>
+
+    <h2>Schematic</h2>
+    <img src="a4schem.jpg" />
+    <h2>Calculations and other Questions</h2>
+    <img src="a4qs.jpg" />
+    <h2>Firmware</h2>
+    <pre><code>
+        // Include the IRremote library for receiving signals
+#include <IRremote.h>
+// Include the Servo library for controlling the servo motor
+#include <Servo.h>
+
+// Define the IR receiver pin connected to digital pin 11
+#define IR_RECEIVE_PIN 11
+// Define the servo control pin connected to digital pin 9
+#define SERVO_PIN 9
+
+// Create a Servo object to control the servo motor
+Servo myServo;
+
+// Variable to store the current servo position 
+int servoPosition = 90;
+
+// Constant defining the minimum servo angle (0 degrees=full left)
+const int MIN_ANGLE = 0;
+// Constant defining the maximum servo angle (180 degrees=full right)
+const int MAX_ANGLE = 180;
+// Constant defining how much the servo moves per button press (10 degrees)
+const int ANGLE_STEP = 10;
+
+// UP arrow button code (moves servo right/clockwise - inc angle)
+const int UP_BUTTON = 0x9;
+// DOWN arrow button code (moves servo left/counterclockwise - decreases angle)
+const int DOWN_BUTTON = 0x7;
+
+void setup() {
+  // Initialize serial
+  Serial.begin(9600);
+  
+  // Attach the servo to pin 9
+  myServo.attach(SERVO_PIN);
+  
+  // Move servo to center position (90 degrees) on startup
+  myServo.write(servoPosition);
+  
+  // Initialize IR receiver on pin 11
+  IrReceiver.begin(IR_RECEIVE_PIN);
+  
+  // Print message to serial monitor
+  Serial.print("Current Position: ");
+  Serial.print(servoPosition);
+  Serial.println(" degrees");
+  Serial.println();
+}
+
+void loop() {
+  // Check if an IR signal has been received
+  if (IrReceiver.decode()) {
+    
+    // Read the received IR command code from the remote
+    int command = IrReceiver.decodedIRData.command;
+    
+    // Print received command code to serial monitor for debugging
+    Serial.print("IR Command received: 0x");
+    Serial.println(command, HEX);
+    
+    // Check if DOWN arrow button was pressed
+    if (command == DOWN_BUTTON) {
+      // Decrease servo position by ANGLE_STEP degrees (left)
+      servoPosition = servoPosition - ANGLE_STEP;
+      
+      // Constrain position to minimum allowed angle (0 degrees)
+      if (servoPosition < MIN_ANGLE) {
+        servoPosition = MIN_ANGLE;
+      }
+      
+      // Send the new position to the servo motor
+      myServo.write(servoPosition);
+      
+      // Print confirmation message with new position
+      Serial.print(">>> Moving DOWN (LEFT) to ");
+      Serial.print(servoPosition);
+      Serial.println(" degrees");
+      Serial.println();
+    }
+    
+    // Check if UP arrow button was pressed
+    else if (command == UP_BUTTON) {
+      // Inc servo position by ANGLE_STEP degrees (right)
+      servoPosition = servoPosition + ANGLE_STEP;
+      
+      // Constrain position to maximum allowed angle (180)
+      if (servoPosition > MAX_ANGLE) {
+        servoPosition = MAX_ANGLE;
+      }
+      
+      // Send the new position to the servo motor
+      myServo.write(servoPosition);
+      
+      // Print confirmation message with new position
+      Serial.print(">>> Moving UP (RIGHT) to ");
+      Serial.print(servoPosition);
+      Serial.println(" degrees");
+      Serial.println();
+    }
+    
+    
+    // Resume IR receiver to be ready for the next signal
+    IrReceiver.resume();
+  }
+  
+  // Small delay to prevent the loop from running too fast
+  delay(100);
+}
+        
+    </code></pre>
+
+<h2>Video</h2>
+<iframe src=https://youtube.com/shorts/zKavdDXAY5g?si=piub-VpsytiCJybt></iframe>
+<p>https://youtube.com/shorts/zKavdDXAY5g?si=piub-VpsytiCJybt</p>
+
+  </body>
+</html>
