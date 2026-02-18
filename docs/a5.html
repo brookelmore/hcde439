@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Brooke Elmore's Assignment 5!</h1>
+    <div class="header">
+      <img src="a5pic.jpg" />
+      <p>For assignment 5, I decided to make a remote turn my dc motor by pressing the arrows.
+        Below, I have include my schematic, calculations, firmware, my circuits operations, and finally my 
+        answers to the additional questions.</p>
+    </div>
+
+    <h2>Schematic</h2>
+    <img src="a5schem.jpg" />
+    <h2>Calculations and other Questions</h2>
+    <img src="a5qs.jpg" />
+    <h2>Firmware</h2>
+    <pre><code>
+        #include <IRremote.hpp>          // IRremote library
+
+            const int IRpin = 2;             // IR receiver connected to D2
+            const int mosfetPin = 9;         // PWM pin connected to MOSFET gate
+            
+            int motorSpeed = 0;              // Motor speed variable (0–255)
+            
+            // arrows and their hexs
+            const int UP_BUTTON = 0x9;    // Up arrow
+            const int DOWN_BUTTON = 0x7;  // Down arrow 
+            
+            void setup() {
+              pinMode(mosfetPin, OUTPUT);    // Set MOSFET gate as output
+              Serial.begin(9600);            // Start serial monitor for debugging
+              IrReceiver.begin(IRpin);       // Initialize IR receiver
+              Serial.println("IR Motor Ready");
+            }
+            
+            void loop() {
+            
+              if (IrReceiver.decode()) {                      // Check if IR signal received
+                unsigned long code = IrReceiver.decodedIRData.decodedRawData;
+            
+                // Map remote buttons to motor actions
+                if (code == UP_BUTTON) {                      // Increase speed
+                  motorSpeed += 20;
+                }
+                if (code == DOWN_BUTTON) {                    // Decrease speed
+                  motorSpeed -= 20;
+                }
+            
+                motorSpeed = constrain(motorSpeed, 0, 255);  // Ensure PWM is valid
+                analogWrite(mosfetPin, motorSpeed);          // Output PWM to MOSFET
+            
+                IrReceiver.resume();                          // Prepare to receive next signal
+              }
+            }
+        
+    </code></pre>
+
+<h2>Video</h2>
+    <p>Unfortunately, there is no video as I could not get my circuit to run.</p>
+
+  </body>
+</html>
