@@ -11,11 +11,22 @@
 <body>
     <script>
         function setup() {
-            createCanvas(800, 600);
+            createCanvas(1000, 500);
+            background(200);
         }
 
         function draw() {
-            background(220);
+            
+            circle();
+            fill("red");
+            rect(mouseX, mouseY, 55, 55);
+            if (mouseIsPressed) {
+                fill("green");
+                
+            } else {
+                fill("red");
+            }
+            rect(mouseX, mouseY, 55, 55);
         }
     </script>
 </body>
