@@ -1,34 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <!-- Set character encoding to UTF-8 for proper text display -->
     <meta charset="UTF-8">
+    <!-- Make the page responsive on mobile devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>p5.js Sketch</title>
+    <!-- Set the title that appears in the browser tab -->
+    <title>Arduino Drawing Game</title>
+    <!-- Load the p5.js library from a CDN (Content Delivery Network) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
 </head>
-
 <body>
     <script>
+        // Declare variable to store the serial port connection
+        let port;
+        // Store the joystick X-axis value (starts at center position 512)
+        let joyX = 512;
+        // Store the joystick Y-axis value (starts at center position 512)
+        let joyY = 512;
+        // Store the current color index (0=red, 1=green, 2=blue, 3=yellow)
+        let currentColor = 0;
+        // Array of color names corresponding to the LEDs
+        let colors = ['red', 'yellow', 'green', 'blue'];
+        // Store the previous X position for drawing smooth lines
+        let prevX;
+        // Store the previous Y position for drawing smooth lines
+        let prevY;
+
+        // p5.js setup function - runs once when the program starts
         function setup() {
-            createCanvas(1000, 500);
-            background(200);
+            // Create canvas 800 by 600
+            createCanvas(800, 600);
+            // Set the background color to white
+            background(255);
+            
+            // Create a button with the text "Connect Arduino"
+            let btn = createButton('Connect Arduino');
+            // When the button is clicked, call the connect function
+            btn.mousePressed(connect);
+            
+            // Initialize previous position to center of canvas
+            prevX = width / 2;
+            // Initialize previous position to center of canvas
+            prevY = height / 2;
         }
 
-        function draw() {
+        // Async function to connect to the Arduino via Web Serial API
+        async function connect() {
+            // Request the user to select a serial port 
+            port = await navigator.serial.requestPort();
+            // Open the selected port with a baud rate of 9600 
+            await port.open({ baudRate: 9600 });
+            // Start the loop that continuously reads data from Arduino
+            readLoop();
+        }
+
+        // Async function that continuously reads data from the Arduino
+        async function readLoop() {
+            // Get a reader object to read data from the serial port
+            let reader = port.readable.getReader();
+            // Create an empty string to store incomplete data between reads
+            let buffer = '';
             
-            circle();
-            fill("red");
-            rect(mouseX, mouseY, 55, 55);
-            if (mouseIsPressed) {
-                fill("green");
+            // Infinite loop to continuously read data
+            while (true) {
+                // Read data from the serial port 
+                const { value, done } = await reader.read();
+                // If the stream is done (port closed), exit the loop
+                if (done) break;
                 
-            } else {
-                fill("red");
+                // Convert the bytes to text and add to the buffer
+                buffer += new TextDecoder().decode(value);
+                // Split the buffer into lines using newline character
+                let lines = buffer.split('\n');
+                // Keep the last incomplete line in the buffer
+                buffer = lines.pop();
+                
+                // Process each complete line
+                for (let line of lines) {
+                    // Split the line by commas to get individual values
+                    let data = line.split(',');
+                    // Check if we received exactly 3 values (x, y, color)
+                    if (data.length === 3) {
+                        // Parse and store the X joystick value
+                        joyX = parseInt(data[0]);
+                        // Parse and store the Y joystick value
+                        joyY = parseInt(data[1]);
+                        // Parse and store the current color index
+                        currentColor = parseInt(data[2]);
+                    }
+                }
             }
-            rect(mouseX, mouseY, 55, 55);
+        }
+
+        // p5.js draw function - runs continuously
+        function draw() {
+            // Map joystick X value (0-1023) to canvas width (0-800)
+            let x = map(joyX, 0, 1023, 0, width);
+            // Map joystick Y value (0-1023) to canvas height (0-600)
+            let y = map(joyY, 0, 1023, 0, height);
+            
+            // Set the stroke color based on the current color index
+            stroke(colors[currentColor]);
+            // Set the line thickness to 3 pixels
+            strokeWeight(10);
+            // Draw a line from the previous position to the current position
+            line(prevX, prevY, x, y);
+            
+            // Update previous X position to current X position for next frame
+            prevX = x;
+            // Update previous Y position to current Y position for next frame
+            prevY = y;
         }
     </script>
 </body>
-
 </html>
